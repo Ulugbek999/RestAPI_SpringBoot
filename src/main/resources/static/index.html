@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Rock Paper Scissors REST API</title>
+
+
+    </head>
+    <body>
+        <div style="    
+                align-items: center;
+                display: flex;
+                justify-content: center;
+                height: 90vh;">
+            Which one will it be?<br/>
+            <hr/>
+            <a href="#" onclick="playRoshambo('rock')">rock</a> &nbsp; &nbsp;
+            <a href="#" onclick="playRoshambo('paper')">paper</a>&nbsp; &nbsp;
+            <a href="#" onclick="playRoshambo('scissors')">scissors</a>
+            <hr/><br/>
+
+            <i><div id="results"></div></i>
+            <br/>
+            <span id="wins"></span><span id="losses"></span><span id="ties"></span>
+        </div>
+
+    </body>
+    <script>
+        playRoshambo = async function(clientGesture){
+            url = "http://localhost:8080/score/winsUp";
+            result = "win";
+            if(clientGesture == 'rock'){
+                result = "tie";
+                url = "http://localhost:8080/score/tiesUp";
+            }
+            if(clientGesture == 'scissors'){
+                result = "loss";
+                url = "http://localhost:8080/score/lossesUp";
+            }
+
+            try{
+                const rsponse = await fetch(url, {method : "POST"});
+                const theScore = await rsponse.json();
+                document.getElementById('wins').innerHTML = "<b> Wins: </b> " + theScore.wins;
+                document.getElementById('losses').innerHTML = "<b> Losses: </b>" + theScore.losses;
+                document.getElementById('ties').innerHTML = "<b> Ties: </b> " + theScore.ties;
+                document.getElementById('results').innerHTML = " <br/> The result was a: " + result;
+            }catch(error){
+                console.log(error.message);
+            }
+            document.getElementById('results').innerHTML = "<br/><br/>The result was a " + result;
+
+        }
+    </script>
+
+</html>
