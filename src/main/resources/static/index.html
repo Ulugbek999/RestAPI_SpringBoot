@@ -3,72 +3,142 @@
         <title>Rock Paper Scissors REST API</title>
         <style>
 
-                        body {
-                margin: 0;
-                height: 100vh;
-                background: linear-gradient(135deg, #1e3c72, #2a5298); /* blue gradient */
-                font-family: Arial, sans-serif;
-                color: white;
-                background: linear-gradient(-45deg, #9a66ed, #ef6fa0, #23a6d5, #23d5ab);
-                background-size: 400% 400%;
-                animation: gradientBG 15s ease infinite;
+            *,
+            *::before,
+            *::after {
+            box-sizing: border-box;
+            }
 
-                }
+            body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(-45deg, #9a66ed, #ef6fa0, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: Arial, sans-serif;
+            color: white;
+            }
 
+            @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+            }
 
-                @keyframes gradientBG {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-                }
+            .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            gap: 80px;
+            padding: 40px;
+            color: #eee;
+            }
 
+            .info-container, .game-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 20px;
+            background: #222;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            height: 600px;
+            }
 
-            .container{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 90vh;
-                text-align: center;
+            .info-container {
+            align-items: flex-start;
+            max-width: 550px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14;
+            }
+
+            .game-container {
+            align-items: left;
+            max-width:500px;
+            }
+
+            .info-container p,
+            .game-container p {
+            line-height: 1.5;
+            margin-bottom: 1rem;
             }
 
             .theButtons {
-                padding: 12px 24px;
-                margin: 10px;
-                border: none;
-                border-radius: 10px;
-                font-size: 18px;
-                cursor: pointer;
-                color: white;
-                transition: transform 0.2s ease, background-color 0.3s;
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s ease, background-color 0.3s;
             }
 
             .theButtons:hover {
-                transform: scale(1.05);
+            transform: scale(1.05);
+            filter: brightness(110%);
             }
 
-            .rock { background-color: #6a5acd; }       /* Slate Blue */
-            .paper { background-color: #20b2aa; }      /* Light Sea Green */
-            .scissors { background-color: #ff6347; }   /* Tomato */
+            .rock { background-color: #6a5acd; }
+            .paper { background-color: #20b2aa; }
+            .scissors { background-color: #ff6347; }
+
+            @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+            }
+            
+            .info-container,
+            .game-container {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            }
+
     </style>
 
     </head>
     <body>
+
         <div class="container">
-            Which one will it be?<br/>
-            <hr/>
-            <a href="#" onclick="playRoshambo('rock')" class="theButtons rock">rock</a> &nbsp; &nbsp;
-            <a href="#" onclick="playRoshambo('paper')" class="theButtons paper">paper</a>&nbsp; &nbsp;
-            <a href="#" onclick="playRoshambo('scissors')" class="theButtons scissors">scissors</a>
-            <hr/><br/>
-            <i><div id="computer">Computer: </div></i>
-            <i><div id="results"></div></i>
-            <br/>
-            <span id="wins"></span><br/>
-            <span id="losses"></span><br/>
-            <span id="ties"></span>
+            <div class="info-container">
+                    <h1>A REST API built with Java and SpringBoot<h1><br/>
+                    <p1>In this game, I used a REST API to: <br/><br/>
+
+                       <li>🎲 Get a random sign(rock, paper or scissor) from the computer</li> <br/>
+
+                       <li>🔁 Update the game state based on user actions </li> <br/>
+
+                       <li>💬 Display new information in real-time </li> <br/>
+                    </p1>
+                    
+            </div>
+
+
+            <div class="container-game">
+                    Which one will it be?<br/>
+                    <hr/>
+                    <a href="#" onclick="playRoshambo('rock')" class="theButtons rock">rock</a> &nbsp; &nbsp;
+                    <a href="#" onclick="playRoshambo('paper')" class="theButtons paper">paper</a>&nbsp; &nbsp;
+                    <a href="#" onclick="playRoshambo('scissors')" class="theButtons scissors">scissors</a>
+                    <hr/><br/>
+                    <i><div id="computer">Computer: </div></i>
+                    <i><div id="results"></div></i>
+                    <br/>
+                    <span id="wins"></span><br/>
+                    <span id="losses"></span><br/>
+                    <span id="ties"></span>
+            </div>
+
+
+
         </div>
 
+ 
 
         <script>
 
