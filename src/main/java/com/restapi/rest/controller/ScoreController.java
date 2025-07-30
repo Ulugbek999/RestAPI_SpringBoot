@@ -1,5 +1,7 @@
 package com.restapi.rest.controller;
 
+import java.util.Random;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 import com.restapi.rest.score.Score;
 
 @RestController
 @CrossOrigin 
 public class ScoreController {
-    
 
-    static Score score = new Score(30, 20, 10);
+    static Score score = new Score(0, 0, 0);
 
 
     //a health check method to know things are working
@@ -51,7 +54,7 @@ public class ScoreController {
     @GetMapping("/score/{winslossesorties}")
     public int getWinsLossesOrTies(@PathVariable String winslossesorties){
 
-        if(winslossesorties.equalsIgnoreCase("wins")){
+        if(winslossesorties.equalsIgnoreCase("wins") ){
             return score.getWins();
         }else if(winslossesorties.equalsIgnoreCase("ties")){
             return score.getTies();
@@ -63,6 +66,7 @@ public class ScoreController {
 
     @PostMapping("/score/{increaseVar}")
     public Score increaeWins(@PathVariable String increaseVar){
+
 
         if(increaseVar.equalsIgnoreCase("winsUp")){
             score.setWins(score.getWins() + 1);
@@ -100,6 +104,8 @@ public class ScoreController {
     public void deleteScore(){
         score = null;
     }
+
+    
 
 
         

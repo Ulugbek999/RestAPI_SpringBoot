@@ -1,54 +1,134 @@
 <html>
     <head>
         <title>Rock Paper Scissors REST API</title>
+        <style>
 
+                        body {
+                margin: 0;
+                height: 100vh;
+                background: linear-gradient(135deg, #1e3c72, #2a5298); /* blue gradient */
+                font-family: Arial, sans-serif;
+                color: white;
+                background: linear-gradient(-45deg, #9a66ed, #ef6fa0, #23a6d5, #23d5ab);
+                background-size: 400% 400%;
+                animation: gradientBG 15s ease infinite;
+
+                }
+
+
+                @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+                }
+
+
+            .container{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 90vh;
+                text-align: center;
+            }
+
+            .theButtons {
+                padding: 12px 24px;
+                margin: 10px;
+                border: none;
+                border-radius: 10px;
+                font-size: 18px;
+                cursor: pointer;
+                color: white;
+                transition: transform 0.2s ease, background-color 0.3s;
+            }
+
+            .theButtons:hover {
+                transform: scale(1.05);
+            }
+
+            .rock { background-color: #6a5acd; }       /* Slate Blue */
+            .paper { background-color: #20b2aa; }      /* Light Sea Green */
+            .scissors { background-color: #ff6347; }   /* Tomato */
+    </style>
 
     </head>
     <body>
-        <div style="    
-                align-items: center;
-                display: flex;
-                justify-content: center;
-                height: 90vh;">
+        <div class="container">
             Which one will it be?<br/>
             <hr/>
-            <a href="#" onclick="playRoshambo('rock')">rock</a> &nbsp; &nbsp;
-            <a href="#" onclick="playRoshambo('paper')">paper</a>&nbsp; &nbsp;
-            <a href="#" onclick="playRoshambo('scissors')">scissors</a>
+            <a href="#" onclick="playRoshambo('rock')" class="theButtons rock">rock</a> &nbsp; &nbsp;
+            <a href="#" onclick="playRoshambo('paper')" class="theButtons paper">paper</a>&nbsp; &nbsp;
+            <a href="#" onclick="playRoshambo('scissors')" class="theButtons scissors">scissors</a>
             <hr/><br/>
-
+            <i><div id="computer">Computer: </div></i>
             <i><div id="results"></div></i>
             <br/>
-            <span id="wins"></span><span id="losses"></span><span id="ties"></span>
+            <span id="wins"></span><br/>
+            <span id="losses"></span><br/>
+            <span id="ties"></span>
         </div>
 
+
+        <script>
+
+            async function playRoshambo(clientGesture){
+
+                const gestures = ["rock", "paper", "scissors"];
+                const randomNum = Math.floor(Math.random() * 3);
+                const computersChoice = gestures[randomNum];
+
+                document.getElementById("computer").innerHTML = "<br/><br/>Computer: " + computersChoice;
+
+                let url = "";
+                let result = "";
+
+                //win cases
+                if(clientGesture == "paper" && computersChoice == "rock"){
+                    url = "http://localhost:8080/score/winsUp";
+                    result = "win";
+                }else if(clientGesture == 'rock' && computersChoice == "scissors"){
+                    result = "win";
+                    url = "http://localhost:8080/score/tiesUp";
+                }else if(clientGesture == "scissors" && computersChoice == "paper"){
+                    result = "win";
+                    url = "http://localhost:8080/score/lossesUp";
+                }
+                //lose cases
+                if(clientGesture == "scissors" && computersChoice == "rock"){
+                    result = "loss";
+                    url = "http://localhost:8080/score/lossesUp";
+                }else if(clientGesture == "rock" && computersChoice == "paper"){
+                    result = "loss";
+                    url = "http://localhost:8080/score/lossesUp";
+                }else if(clientGesture == "paper" && computersChoice == "scissors"){
+                    result = "loss";
+                    url = "http://localhost:8080/score/lossesUp";
+                }
+
+                //the ties
+                if(clientGesture === computersChoice){
+                    result = "tie";
+                    url = "http://localhost/score/tiesUp";
+                }
+
+
+                try{
+                    const rsponse = await fetch(url, {method : "POST"});
+                    const theScore = await rsponse.json();
+                    document.getElementById('wins').innerHTML = "<b> Wins: </b> " + theScore.wins;
+                    document.getElementById('losses').innerHTML = "<b> Losses: </b>" + theScore.losses;
+                    document.getElementById('ties').innerHTML = "<b> Ties: </b> " + theScore.ties;
+                    document.getElementById('results').innerHTML = " <br/> The result was a: " + result;
+                }catch(error){
+                    console.log(error.message);
+                }
+                document.getElementById('results').innerHTML = "<br/><br/>The result was a " + result;
+
+            }
+        </script>
+
     </body>
-    <script>
-        playRoshambo = async function(clientGesture){
-            url = "http://localhost:8080/score/winsUp";
-            result = "win";
-            if(clientGesture == 'rock'){
-                result = "tie";
-                url = "http://localhost:8080/score/tiesUp";
-            }
-            if(clientGesture == 'scissors'){
-                result = "loss";
-                url = "http://localhost:8080/score/lossesUp";
-            }
 
-            try{
-                const rsponse = await fetch(url, {method : "POST"});
-                const theScore = await rsponse.json();
-                document.getElementById('wins').innerHTML = "<b> Wins: </b> " + theScore.wins;
-                document.getElementById('losses').innerHTML = "<b> Losses: </b>" + theScore.losses;
-                document.getElementById('ties').innerHTML = "<b> Ties: </b> " + theScore.ties;
-                document.getElementById('results').innerHTML = " <br/> The result was a: " + result;
-            }catch(error){
-                console.log(error.message);
-            }
-            document.getElementById('results').innerHTML = "<br/><br/>The result was a " + result;
-
-        }
-    </script>
 
 </html>
